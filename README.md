@@ -55,6 +55,6 @@ The function works by:
 
 4. Constructing Individual URIs: It iterates through each otp_parameters entry within the payload. For each entry, it takes the secret key, issuer, account name, algorithm, and digits, and constructs a new, standard otpauth:// URI.
 
-5, Handling HOTP: If the account type is HOTP, it also adds the counter parameter to the URI.
+5. Handling HOTP: If the account type is HOTP, it also adds the counter parameter to the URI.
 
 6. Returning the List: Finally, it returns a list containing all the newly created otpauth:// URIs. Each URI in the list can be used to add a single account to an authenticator app.
