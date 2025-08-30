@@ -31,10 +31,10 @@ from base64 import b64decode, b32encode
 import migration_pb2 as otp
 
 # Real URIs will have a long, complex 'data' parameter.
-migration_uri = "otpauth-migration://offline?data=A..." 
+migrationUri = "otpauth-migration://offline?data=A..." 
 
 # Call the function to get the individual OTP URIs
-individualOtpUris = getOTPAuthPerLineFromOPTAuthMigration(migration_uri)
+individualOtpUris = getOTPAuthPerLineFromOPTAuthMigration(migrationUri)
 
 # Print the results
 if individualOtpUris:
