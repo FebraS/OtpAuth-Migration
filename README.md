@@ -58,3 +58,50 @@ The function works by:
 5. Handling HOTP: If the account type is HOTP, it also adds the counter parameter to the URI.
 
 6. Returning the List: Finally, it returns a list containing all the newly created otpauth:// URIs. Each URI in the list can be used to add a single account to an authenticator app.
+
+
+## Explanation of the migration.proto File
+The migration.proto file is a Protocol Buffers (Protobuf) schema. Protobuf is a method used by Google to serialize structured data. This schema defines the structure of the data that's encoded within the data parameter of the otpauth-migration URI.
+
+### message MigrationPayload
+This is the main message that holds all the exported data.
+
+* **repeated OtpParameters otp_parameters = 1;**: This is the most important field. repeated means it's a list of OtpParameters objects. Each OtpParameters object represents a single account (e.g., your Google account, your GitHub account) within the Authenticator app.
+
+* **optional int32 version = 2;**: Indicates the version of the migration format.
+
+* **optional int32 batch_size = 3;**: The total number of batches if the data is split into multiple parts.
+
+* **optional int32 batch_index = 4;**: The index of the current batch.
+
+* **optional int32 batch_id = 5;**: A unique identifier for the entire migration process.
+
+### message OtpParameters
+This message defines the parameters for a single OTP account.
+
+* **optional bytes secret = 1;**: The secret key used to generate the OTP codes. This is typically a Base32-encoded string when presented in a standard otpauth URI.
+
+* **optional string name = 2;**: The name of the account, such as an email address or username.
+
+* **optional string issuer = 3;**: The service provider (e.g., "Google" or "GitHub").
+
+* **optional Algorithm algorithm = 4;**: The hash algorithm used (e.g., SHA1, SHA256).
+
+* **optional DigitCount digits = 5;**: The number of digits in the generated code (e.g., 6 or 8).
+
+* **optional OtpType type = 6;**: The type of OTP, either TOTP (Time-based One-Time Password) or HOTP (HMAC-based One-Time Password).
+
+* **optional int64 counter = 7;**: This field is only used for HOTP accounts. It is a counter that increments each time a new code is generated.
+
+### enum Algorithm
+This enumeration defines the supported hashing algorithms. The values 1, 2, 3, and 4 correspond to the standard algorithms SHA1, SHA256, SHA512, and MD5, respectively.
+
+### enum DigitCount
+This enumeration specifies the number of digits in the generated OTP code, with SIX and EIGHT being the most common values.
+
+### enum OtpType
+This enumeration distinguishes between the two types of OTPs:
+
+* HOTP: Uses an incrementing counter.
+
+* TOTP: Uses the current time as a factor.
